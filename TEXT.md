@@ -17,37 +17,6 @@ $ docker-compose version
 Docker Compose version v2.23.0-desktop.1
 ```
 
-Генерирую хэш к аккаунту в docker.io:
-
-```bash
-$ printf "my_username:my_password" | openssl base64 -A
-# Example output to copy
-bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ=
-```
-
-Добавляю хэш в конфиг:
-
-```bash
-$ nano ~/.docker/config.json
-```
-
-```json
-{
-  "auths": {
-    "docker.io": {
-      "auth": "bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ="
-    }
-  },
-  "credsStore": "desktop",
-  "currentContext": "desktop-linux",
-  "plugins": {
-    "-x-cli-hints": {
-      "enabled": "true"
-    }
-  }
-}
-```
-
 ## Локальная установка GitLab в Docker
 
 ```yml
@@ -84,6 +53,61 @@ $ docker-compose up -d
 ```bash
 $ git credential-osxkeychain erase host=localhost protocol=http
 ```
+
+## DOCKER_AUTH_CONFIG
+
+Проверяю доступ к аккаунту в docker.io:
+
+```bash
+$ docker logout
+$ docker login
+Login Succeeded
+```
+
+Генерирую хэш:
+
+```bash
+$ printf "my_username:my_password" | openssl base64 -A
+# Example output to copy
+bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ=
+```
+
+Добавляю хэш в конфиг:
+
+```bash
+$ nano ~/.docker/config.json
+```
+
+```json
+{
+  "auths": {
+    "docker.io": {
+      "auth": "bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ="
+    }
+  },
+  "credsStore": "desktop",
+  "currentContext": "desktop-linux",
+  "plugins": {
+    "-x-cli-hints": {
+      "enabled": "true"
+    }
+  }
+}
+```
+
+Прописываю `DOCKER_AUTH_CONFIG`:
+
+```json
+{
+  "auths": {
+    "docker.io": {
+      "auth": "bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ="
+    }
+  }
+}
+```
+
+![](./assets/variables.png)
 
 ## Рыба проекта
 

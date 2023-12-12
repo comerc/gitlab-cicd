@@ -4,7 +4,7 @@
 
 В продолжение к заметке [Инструкция: как быстро настроить GitLab CI/CD на Flutter-проекте](https://habr.com/ru/companies/agima/articles/779028/).
 
-Больше спасибо автору, всё получилось относительно легко. Я усложнил задачу: поднял GitLab локально на Хакинтоше, прикрутил executor = "docker" вместо "shell". И началось веселье.
+Больше спасибо автору, всё получилось относительно легко. Я усложнил задачу: поднял GitLab локально на Хакинтоше, прикрутил `executor = "docker"` вместо `"shell"`. И началось веселье.
 
 ## Docker Desktop
 
@@ -22,7 +22,7 @@ Docker Compose version v2.23.3-desktop.2
 
 ![](./assets/docker-desktop-fail.png)
 
-Не знаю, как решить красиво. Пока приходится каждый раз при перезагрузке компа:
+Не знаю, как решить красиво. А пока приходится каждый раз при перезагрузке компа:
 
 ```bash
 $ sudo ln -s ~/Library/Containers/com.docker.docker/Data/docker.raw.sock /var/run/docker.sock
@@ -57,11 +57,11 @@ services:
 $ docker-compose up -d
 ```
 
-Пошуршит пару минут, потом захожу по адресу `http://localhost`. Сбрасываю пароль:
+Пошуршит пару минут, потом доступен по адресу `http://localhost`. Сбрасываю пароль:
 
 ![](./assets/docker-desktop-pwd.png)
 
-Если пароль был сохранён ранее для входа в git через VSCode, тоже можно сбросить:
+Если пароль был сохранён ранее для входа в `git` через VSCode, тоже можно сбросить:
 
 ```bash
 $ git credential-osxkeychain erase host=localhost protocol=http
@@ -121,7 +121,7 @@ COPY --from=ubuntu /build/app /build/app
 ENTRYPOINT ["/build/app"]
 ```
 
-Чтобы получить образ (image) на 577KB:
+Вся эта суета, чтобы получить образ (image) на 577KB:
 
 - `ubuntu` применяет волшебный [upx](https://github.com/upx/upx);
 - `scratch` тоже сокращает итоговый размер.
@@ -154,7 +154,7 @@ $ docker-compose up -d --build
 $ brew install gitlab-runner
 ```
 
-У меня не работает, как сервис. Пока приходится выполнять каждый раз при перезагрузке компа:
+У меня не работает как сервис. Пока приходится каждый раз при перезагрузке компа:
 
 ```bash
 $ sudo gitlab-runner run
@@ -259,4 +259,4 @@ WARNING: Failed to exec create to container: Error response from daemon: Contain
 
 ![](./assets/artifacts.png)
 
-Осталось проверить результат. Ой, а бинарник собран под Ubuntu. Пришлось опять же докер городить. Работает!
+Осталось проверить результат. Ой, а бинарник собран под Ubuntu. Пришлось опять же докер городить. Оно работает!

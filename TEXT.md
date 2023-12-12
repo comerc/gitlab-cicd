@@ -168,7 +168,7 @@ ENTRYPOINT ["/build/app"]
 - `ubuntu` применяет волшебный [upx](https://github.com/upx/upx);
 - `scratch` тоже сокращает итоговый размер.
 
-Для порядка:
+И для порядка:
 
 ```bash
 $ nano .dockerignore

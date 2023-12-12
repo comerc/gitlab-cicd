@@ -1,4 +1,4 @@
-# Инструкция: как поднять GitLab CI/CD на Маке со сборкой в Docker на GoLang-проекте
+# Инструкция: как поднять GitLab CI/CD на GoLang-проекте
 
 ![](./assets/gitlab-docker.png)
 

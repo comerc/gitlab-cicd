@@ -19,7 +19,7 @@ Docker Compose version v2.23.0-desktop.1
 
 ## Локальная установка GitLab в Docker
 
-```yml
+```yaml
 # docker-compose.yml
 version: '3'
 services:
@@ -143,6 +143,10 @@ func main() {
 
 Мне нужен `Dockerfile` для локальной сборки:
 
+```bash
+$ nano Dockerfile
+```
+
 ```Dockerfile
 FROM golang:onbuild AS build
 WORKDIR /build
@@ -178,6 +182,20 @@ $ nano .dockerignore
 
 ```ini
 .git
+```
+
+Вишенка на торте:
+
+```bash
+$ nano docker-compose.yml
+```
+
+```yaml
+version: '3'
+name: 'my-project'
+services:
+  app:
+    build: .
 ```
 
 Пробую запустить в докере:
@@ -253,7 +271,7 @@ RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o ./app
 
 **ChatGPT:**
 
-```yml
+```yaml
 stages:
   - build
 
@@ -274,7 +292,7 @@ build:
 
 Добавляю от себя:
 
-```yml
+```yaml
   tags:
     - cd
 
@@ -286,10 +304,8 @@ workflow:
 
 Всё, можно коммитить. Прямо ветку `main`, как мы любим. Потом делаю новую ветку с каким-либо изменением и оформляю "merge request".
 
-Запущенный job выполняется успешно:
+Запущенный job выполнен успешно, можно скачать результат:
 
 ![](./assets/artifacts.png)
-
-Осталось проверить результат. Ой, а бинарник собран под Ubuntu. Пришлось опять же докер городить. Оно работает!
 
 **UPD:** решил вопросы с запуском `gitlab-runner` и отказался от Docker Desktop 4.26.0.

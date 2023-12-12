@@ -8,27 +8,45 @@
 
 ## Docker Desktop
 
-Актуальная версия 4.26.0. Не повторяйте мою ошибку: сначала сохраните данные, если есть наработки в Docker-образах. Попробовал обновить с официального сайта, через скачанный [Docker.dmg](https://docs.docker.com/desktop/install/mac-install/) - почему-то больше не работают в консоли команды `docker` и `docker-compose`. Хорошо, поставлю через Homebrew:
+Не повторяйте мою ошибку: сначала сохраните данные, если есть наработки в Docker-образах. Установливаю с официального сайта, через скачанный Docker.dmg [v4.25.2](<(https://docs.docker.com/desktop/release-notes/#4252)>):
 
 ```bash
-$ brew install --cask docker
 $ docker -v
-Docker version 24.0.7, build afdd53b
+Docker version 24.0.6, build ed223bc
 $ docker-compose version
-Docker Compose version v2.23.3-desktop.2
+Docker Compose version v2.23.0-desktop.1
 ```
 
-Но есть вопрос:
-
-![](./assets/docker-desktop-fail.png)
-
-Не знаю, как решить красиво. А пока приходится каждый раз при перезагрузке компа:
+Генерирую хэш к аккаунту в docker.io:
 
 ```bash
-$ sudo ln -s ~/Library/Containers/com.docker.docker/Data/docker.raw.sock /var/run/docker.sock
+$ printf "my_username:my_password" | openssl base64 -A
+# Example output to copy
+bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ=
 ```
 
-![](./assets/docker-desktop-good.png)
+Добавляю хэш в конфиг:
+
+```bash
+$ nano ~/.docker/config.json
+```
+
+```json
+{
+  "auths": {
+    "docker.io": {
+      "auth": "bXlfdXNlcm5hbWU6bXlfcGFzc3dvcmQ="
+    }
+  },
+  "credsStore": "desktop",
+  "currentContext": "desktop-linux",
+  "plugins": {
+    "-x-cli-hints": {
+      "enabled": "true"
+    }
+  }
+}
+```
 
 ## Локальная установка GitLab в Docker
 
@@ -80,7 +98,7 @@ $ cd my-project
 
 ```bash
 $ go mod init my-project
-$ touch main.go
+$ nano main.go
 ```
 
 ```go
@@ -99,7 +117,7 @@ func main() {
 }
 ```
 
-Мне нужен Dockerfile для локальной сборки:
+Мне нужен `Dockerfile` для локальной сборки:
 
 ```Dockerfile
 FROM golang:onbuild AS build
@@ -129,7 +147,7 @@ ENTRYPOINT ["/build/app"]
 Для порядка:
 
 ```bash
-$ touch .dockerignore
+$ nano .dockerignore
 ```
 
 Содержимое:
@@ -152,12 +170,7 @@ $ docker-compose up -d --build
 
 ```bash
 $ brew install gitlab-runner
-```
-
-У меня не работает как сервис. Пока приходится каждый раз при перезагрузке компа:
-
-```bash
-$ sudo gitlab-runner run
+$ brew services start gitlab-runner
 ```
 
 Добавляю теги 'ci, cd':
@@ -171,7 +184,7 @@ $ sudo gitlab-runner run
 Выполняю регистрацию:
 
 ```bash
-$ sudo gitlab-runner register \
+$ gitlab-runner register \
  --url "http://localhost" \
  --description "via docker" \
  --docker-image "alpine" \
@@ -185,7 +198,7 @@ $ sudo gitlab-runner register \
 Открываю на редактирование `config.toml`:
 
 ```bash
-$ sudo nano /etc/gitlab-runner/config.toml
+$ nano ~/.gitlab-runner/config.toml
 ```
 
 Удаляю значение для ключа `image`:
@@ -202,7 +215,7 @@ $ sudo nano /etc/gitlab-runner/config.toml
 ## .gitlab-ci.yml
 
 ```bash
-$ touch .gitlab-ci.yml
+$ nano .gitlab-ci.yml
 ```
 
 **Я:** Как перевести `Dockerfile` в формат `.gitlab-ci.yml`?
@@ -249,14 +262,10 @@ workflow:
 
 Всё, можно коммитить. Прямо ветку `main`, как мы любим. Потом делаю новую ветку с каким-либо изменением и оформляю "merge request".
 
-В терминале, где запущен `gitlab-runner`, наблюдаю непонятное:
-
-```
-WARNING: Failed to exec create to container: Error response from daemon: Container 62bd11eb66c8076b5450643026533548187e5e232041d49f88f91b040f8601c5 is not running (docker.go:1230:0s)  error
-```
-
-Однако job выполняется успешно:
+Запущенный job выполняется успешно:
 
 ![](./assets/artifacts.png)
 
 Осталось проверить результат. Ой, а бинарник собран под Ubuntu. Пришлось опять же докер городить. Оно работает!
+
+**UPD:** решил вопросы с запуском `gitlab-runner` и отказался от Docker Desktop 4.26.0.

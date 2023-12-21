@@ -1,4 +1,4 @@
-### diff helper_image VS docker image
+### diff helper_image VS docker image ###
 # concurrent = 1
 concurrent = 2
 check_interval = 0
@@ -15,7 +15,7 @@ shutdown_timeout = 0
   token_obtained_at = 2023-12-12T14:51:21Z
   token_expires_at = 0001-01-01T00:00:00Z
   executor = "docker"
-  # only docker image:
+  # only for docker image:
   environment = ["DOCKER_DRIVER=overlay2", "DOCKER_LOGIN=gitlab-ci", "DOCKER_PASSWORD=password"]
   [runners.cache]     
     MaxUploadedArchiveSize = 0
@@ -34,6 +34,6 @@ shutdown_timeout = 0
     network_mode = "host"
     # helper_image = "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-e0218c92"
     # network_mtu = 0
-    # only docker image:
+    # only for docker image:
     pull_policy = ["always", "if-not-present"]
 

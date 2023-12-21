@@ -316,11 +316,13 @@ workflow:
 version: '3.5'
 name: gitlab-runner
 services:
-runner:
-restart: always
-image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine
-volumes: - /var/run/docker.sock:/var/run/docker.sock - ~/.gitlab-runner:/etc/gitlab-runner:z
-network_mode: host
+  runner:
+    restart: always
+    image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.gitlab-runner:/etc/gitlab-runner
+    network_mode: host
 ```
 
 Ларчик просто открывался. Это всё, что нужно для запуска gitlab-runner без танцев с бубном.
